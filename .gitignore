@@ -1,0 +1,6 @@
+# Generated release bundles
+outputs/
+
+# Qt Creator and local editor metadata
+*.user
+.qmlls.ini

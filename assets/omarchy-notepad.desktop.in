@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=Omarchy Notepad
+Comment=A lightweight Markdown and text editor for Omarchy
+Exec=@BIN@ %F
+Icon=accessories-text-editor
+Terminal=false
+Categories=Utility;TextEditor;
+MimeType=text/plain;text/markdown;
+Keywords=note;notepad;markdown;text;
+StartupNotify=true
