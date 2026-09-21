@@ -213,52 +213,59 @@ Window {
                     ToolTip.text: "Menu"
                 }
             }
-            Menu {
+            Popup {
                 id: appMenu
-                x: app.width - width - 10
-                y: 44
-                background: Rectangle { color: Theme.surface; border.color: Theme.border; border.width: 1; radius: 7 }
-                ThemedMenuItem { text: "New    Ctrl+N"; onTriggered: app.requestAction("new") }
-                ThemedMenuItem { text: "Open…    Ctrl+O"; onTriggered: app.requestAction("open") }
-                ThemedMenuItem { text: "Save    Ctrl+S"; enabled: app.dirty; onTriggered: app.save() }
-                ThemedMenuItem { text: "Save As…    Ctrl+Shift+S"; onTriggered: saveDialog.open() }
-                Menu {
-                    title: "Recent Files"
-                    enabled: app.recentFiles.length > 0
-                    background: Rectangle { color: Theme.surface; border.color: Theme.border; border.width: 1; radius: 7 }
-                    Repeater {
-                        model: app.recentFiles
-                        delegate: ThemedMenuItem {
-                            required property string modelData
-                            text: app.basename(modelData)
-                            onTriggered: { app.requestedPath = modelData; app.requestAction("openPath") }
+                parent: Overlay.overlay
+                x: app.width - width - 12
+                y: 54
+                width: 290
+                height: Math.min(560, menuContent.implicitHeight + topPadding + bottomPadding)
+                padding: 8
+                clip: true
+                closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+                background: Rectangle { color: Theme.surface; border.color: Theme.border; border.width: 1; radius: 8 }
+                contentItem: Flickable {
+                    id: menuFlickable
+                    contentWidth: width
+                    contentHeight: menuContent.implicitHeight
+                    clip: true
+                    ScrollBar.vertical: ScrollBar { policy: menuContent.implicitHeight > appMenu.height ? ScrollBar.AsNeeded : ScrollBar.AlwaysOff }
+                    ColumnLayout {
+                        id: menuContent
+                        width: menuFlickable.width
+                        spacing: 2
+                        Label { text: "FILE"; color: Theme.muted; font.pixelSize: 11; font.bold: true; Layout.leftMargin: 10; Layout.topMargin: 4 }
+                        ThemedMenuButton { text: "New    Ctrl+N"; onClicked: { app.requestAction("new"); appMenu.close() } }
+                        ThemedMenuButton { text: "Open…    Ctrl+O"; onClicked: { app.requestAction("open"); appMenu.close() } }
+                        ThemedMenuButton { text: "Save    Ctrl+S"; enabled: app.dirty; onClicked: { app.save(); appMenu.close() } }
+                        ThemedMenuButton { text: "Save As…    Ctrl+Shift+S"; onClicked: { saveDialog.open(); appMenu.close() } }
+                        Label { text: "EDIT"; color: Theme.muted; font.pixelSize: 11; font.bold: true; Layout.leftMargin: 10; Layout.topMargin: 12 }
+                        ThemedMenuButton { text: "Undo    Ctrl+Z"; enabled: editor.canUndo; onClicked: { editor.undo(); appMenu.close() } }
+                        ThemedMenuButton { text: "Redo    Ctrl+Shift+Z"; enabled: editor.canRedo; onClicked: { editor.redo(); appMenu.close() } }
+                        ThemedMenuButton { text: "Find…    Ctrl+F"; onClicked: { findBar.visible = true; findField.forceActiveFocus(); findField.selectAll(); appMenu.close() } }
+                        ThemedMenuButton { text: "Find and Replace…    Ctrl+H"; onClicked: { findBar.visible = true; replaceField.visible = true; findField.forceActiveFocus(); appMenu.close() } }
+                        Label { text: "MARKDOWN"; color: Theme.muted; font.pixelSize: 11; font.bold: true; Layout.leftMargin: 10; Layout.topMargin: 12 }
+                        ThemedMenuButton { text: "Bold    Ctrl+B"; onClicked: { app.insertPair("**", "**"); appMenu.close() } }
+                        ThemedMenuButton { text: "Italic    Ctrl+I"; onClicked: { app.insertPair("*", "*"); appMenu.close() } }
+                        ThemedMenuButton { text: "Heading 1"; onClicked: { app.heading(1); appMenu.close() } }
+                        ThemedMenuButton { text: "Heading 2"; onClicked: { app.heading(2); appMenu.close() } }
+                        ThemedMenuButton { text: "Bullet List"; onClicked: { app.prefixLines("- ", false); appMenu.close() } }
+                        ThemedMenuButton { text: "Numbered List"; onClicked: { app.prefixLines("", true); appMenu.close() } }
+                        ThemedMenuButton { text: "Inline Code"; onClicked: { app.insertPair("`", "`"); appMenu.close() } }
+                        ThemedMenuButton { text: "Link"; onClicked: { app.insertPair("[", "](https://)"); appMenu.close() } }
+                        Label { text: "VIEW"; color: Theme.muted; font.pixelSize: 11; font.bold: true; Layout.leftMargin: 10; Layout.topMargin: 12 }
+                        ThemedMenuButton { text: app.wrapEnabled ? "✓  Word Wrap" : "Word Wrap"; onClicked: { app.wrapEnabled = !app.wrapEnabled; state.wrapEnabled = app.wrapEnabled } }
+                        Label { text: "RECENT FILES"; color: Theme.muted; visible: app.recentFiles.length > 0; font.pixelSize: 11; font.bold: true; Layout.leftMargin: 10; Layout.topMargin: 12 }
+                        Repeater {
+                            model: app.recentFiles
+                            delegate: ThemedMenuButton {
+                                required property string modelData
+                                text: app.basename(modelData)
+                                onClicked: { app.requestedPath = modelData; app.requestAction("openPath"); appMenu.close() }
+                            }
                         }
+                        ThemedMenuButton { text: "Clear recent files"; visible: app.recentFiles.length > 0; onClicked: { app.recentFiles = []; state.recentFilesJson = "[]" } }
                     }
-                    MenuSeparator { visible: app.recentFiles.length > 0 }
-                    ThemedMenuItem { text: "Clear recent files"; onTriggered: { app.recentFiles = []; state.recentFilesJson = "[]" } }
-                }
-                MenuSeparator { }
-                ThemedMenuItem { text: "Undo    Ctrl+Z"; enabled: editor.canUndo; onTriggered: editor.undo() }
-                ThemedMenuItem { text: "Redo    Ctrl+Shift+Z"; enabled: editor.canRedo; onTriggered: editor.redo() }
-                ThemedMenuItem { text: "Find…    Ctrl+F"; onTriggered: { findBar.visible = true; findField.forceActiveFocus(); findField.selectAll() } }
-                ThemedMenuItem { text: "Find and Replace…    Ctrl+H"; onTriggered: { findBar.visible = true; replaceField.visible = true; findField.forceActiveFocus() } }
-                Menu {
-                    title: "Markdown"
-                    background: Rectangle { color: Theme.surface; border.color: Theme.border; border.width: 1; radius: 7 }
-                    ThemedMenuItem { text: "Bold    Ctrl+B"; onTriggered: app.insertPair("**", "**") }
-                    ThemedMenuItem { text: "Italic    Ctrl+I"; onTriggered: app.insertPair("*", "*") }
-                    MenuSeparator { }
-                    ThemedMenuItem { text: "Heading 1"; onTriggered: app.heading(1) }
-                    ThemedMenuItem { text: "Heading 2"; onTriggered: app.heading(2) }
-                    ThemedMenuItem { text: "Bullet List"; onTriggered: app.prefixLines("- ", false) }
-                    ThemedMenuItem { text: "Numbered List"; onTriggered: app.prefixLines("", true) }
-                    ThemedMenuItem { text: "Inline Code"; onTriggered: app.insertPair("`", "`") }
-                    ThemedMenuItem { text: "Link"; onTriggered: app.insertPair("[", "](https://)") }
-                }
-                Menu {
-                    title: "View"
-                    background: Rectangle { color: Theme.surface; border.color: Theme.border; border.width: 1; radius: 7 }
-                    ThemedMenuItem { text: "Word Wrap"; checkable: true; checked: app.wrapEnabled; onToggled: { app.wrapEnabled = checked; state.wrapEnabled = checked } }
                 }
             }
         }

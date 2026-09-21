@@ -1,2 +1,3 @@
 singleton Theme 1.0 Theme.qml
 ThemedMenuItem 1.0 ThemedMenuItem.qml
+ThemedMenuButton 1.0 ThemedMenuButton.qml
