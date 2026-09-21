@@ -217,44 +217,48 @@ Window {
                 id: appMenu
                 x: app.width - width - 10
                 y: 44
-                MenuItem { text: "New    Ctrl+N"; onTriggered: app.requestAction("new") }
-                MenuItem { text: "Open…    Ctrl+O"; onTriggered: app.requestAction("open") }
-                MenuItem { text: "Save    Ctrl+S"; enabled: app.dirty; onTriggered: app.save() }
-                MenuItem { text: "Save As…    Ctrl+Shift+S"; onTriggered: saveDialog.open() }
+                background: Rectangle { color: Theme.surface; border.color: Theme.border; border.width: 1; radius: 7 }
+                ThemedMenuItem { text: "New    Ctrl+N"; onTriggered: app.requestAction("new") }
+                ThemedMenuItem { text: "Open…    Ctrl+O"; onTriggered: app.requestAction("open") }
+                ThemedMenuItem { text: "Save    Ctrl+S"; enabled: app.dirty; onTriggered: app.save() }
+                ThemedMenuItem { text: "Save As…    Ctrl+Shift+S"; onTriggered: saveDialog.open() }
                 Menu {
                     title: "Recent Files"
                     enabled: app.recentFiles.length > 0
+                    background: Rectangle { color: Theme.surface; border.color: Theme.border; border.width: 1; radius: 7 }
                     Repeater {
                         model: app.recentFiles
-                        delegate: MenuItem {
+                        delegate: ThemedMenuItem {
                             required property string modelData
                             text: app.basename(modelData)
                             onTriggered: { app.requestedPath = modelData; app.requestAction("openPath") }
                         }
                     }
                     MenuSeparator { visible: app.recentFiles.length > 0 }
-                    MenuItem { text: "Clear recent files"; onTriggered: { app.recentFiles = []; state.recentFilesJson = "[]" } }
+                    ThemedMenuItem { text: "Clear recent files"; onTriggered: { app.recentFiles = []; state.recentFilesJson = "[]" } }
                 }
                 MenuSeparator { }
-                MenuItem { text: "Undo    Ctrl+Z"; enabled: editor.canUndo; onTriggered: editor.undo() }
-                MenuItem { text: "Redo    Ctrl+Shift+Z"; enabled: editor.canRedo; onTriggered: editor.redo() }
-                MenuItem { text: "Find…    Ctrl+F"; onTriggered: { findBar.visible = true; findField.forceActiveFocus(); findField.selectAll() } }
-                MenuItem { text: "Find and Replace…    Ctrl+H"; onTriggered: { findBar.visible = true; replaceField.visible = true; findField.forceActiveFocus() } }
+                ThemedMenuItem { text: "Undo    Ctrl+Z"; enabled: editor.canUndo; onTriggered: editor.undo() }
+                ThemedMenuItem { text: "Redo    Ctrl+Shift+Z"; enabled: editor.canRedo; onTriggered: editor.redo() }
+                ThemedMenuItem { text: "Find…    Ctrl+F"; onTriggered: { findBar.visible = true; findField.forceActiveFocus(); findField.selectAll() } }
+                ThemedMenuItem { text: "Find and Replace…    Ctrl+H"; onTriggered: { findBar.visible = true; replaceField.visible = true; findField.forceActiveFocus() } }
                 Menu {
                     title: "Markdown"
-                    MenuItem { text: "Bold    Ctrl+B"; onTriggered: app.insertPair("**", "**") }
-                    MenuItem { text: "Italic    Ctrl+I"; onTriggered: app.insertPair("*", "*") }
+                    background: Rectangle { color: Theme.surface; border.color: Theme.border; border.width: 1; radius: 7 }
+                    ThemedMenuItem { text: "Bold    Ctrl+B"; onTriggered: app.insertPair("**", "**") }
+                    ThemedMenuItem { text: "Italic    Ctrl+I"; onTriggered: app.insertPair("*", "*") }
                     MenuSeparator { }
-                    MenuItem { text: "Heading 1"; onTriggered: app.heading(1) }
-                    MenuItem { text: "Heading 2"; onTriggered: app.heading(2) }
-                    MenuItem { text: "Bullet List"; onTriggered: app.prefixLines("- ", false) }
-                    MenuItem { text: "Numbered List"; onTriggered: app.prefixLines("", true) }
-                    MenuItem { text: "Inline Code"; onTriggered: app.insertPair("`", "`") }
-                    MenuItem { text: "Link"; onTriggered: app.insertPair("[", "](https://)") }
+                    ThemedMenuItem { text: "Heading 1"; onTriggered: app.heading(1) }
+                    ThemedMenuItem { text: "Heading 2"; onTriggered: app.heading(2) }
+                    ThemedMenuItem { text: "Bullet List"; onTriggered: app.prefixLines("- ", false) }
+                    ThemedMenuItem { text: "Numbered List"; onTriggered: app.prefixLines("", true) }
+                    ThemedMenuItem { text: "Inline Code"; onTriggered: app.insertPair("`", "`") }
+                    ThemedMenuItem { text: "Link"; onTriggered: app.insertPair("[", "](https://)") }
                 }
                 Menu {
                     title: "View"
-                    MenuItem { text: "Word Wrap"; checkable: true; checked: app.wrapEnabled; onToggled: { app.wrapEnabled = checked; state.wrapEnabled = checked } }
+                    background: Rectangle { color: Theme.surface; border.color: Theme.border; border.width: 1; radius: 7 }
+                    ThemedMenuItem { text: "Word Wrap"; checkable: true; checked: app.wrapEnabled; onToggled: { app.wrapEnabled = checked; state.wrapEnabled = checked } }
                 }
             }
         }
