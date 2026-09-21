@@ -6,6 +6,7 @@ import QtQuick.Dialogs
 import QtQuick.Layouts
 import QtQuick.Window
 import Qt.labs.settings
+import Quickshell
 import Quickshell.Io
 import "."
 
@@ -33,6 +34,7 @@ Window {
     Settings {
         id: state
         category: "omarchy-notepad"
+        fileName: Quickshell.statePath("preferences.ini")
         property int windowWidth: 1080
         property int windowHeight: 720
         property bool wrapEnabled: true
