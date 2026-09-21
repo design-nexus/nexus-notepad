@@ -1,6 +1,6 @@
 import Quickshell
-import "qml"
+import "qml" as App
 
 ShellRoot {
-    NotepadWindow { }
+    App.NotepadWindow { }
 }
