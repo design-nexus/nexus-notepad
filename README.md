@@ -37,7 +37,7 @@ chmod +x scripts/install.sh scripts/omarchy-notepad
 ./scripts/install.sh
 ```
 
-The installer copies the QML configuration to `~/.config/omarchy-notepad`, adds `omarchy-notepad` to `~/.local/bin`, and creates an application-launcher entry. Ensure `~/.local/bin` is on your `PATH` (Omarchy normally configures this already).
+The installer copies the QML configuration to `~/.config/omarchy-notepad`, adds `omarchy-notepad` to `~/.local/bin`, and creates an application-launcher entry. Each launch opens an independent window. Ensure `~/.local/bin` is on your `PATH` (Omarchy normally configures this already).
 
 ## Run without installing
 

@@ -2,4 +2,4 @@
 set -euo pipefail
 
 config_root="${XDG_CONFIG_HOME:-$HOME/.config}/omarchy-notepad"
-exec quickshell --path "$config_root" --no-duplicate
+exec quickshell --path "$config_root"
