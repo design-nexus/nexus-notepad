@@ -195,53 +195,65 @@ Window {
         anchors.fill: parent
         spacing: 0
         Rectangle {
-            Layout.fillWidth: true; Layout.preferredHeight: 50; color: Theme.surface
+            Layout.fillWidth: true; Layout.preferredHeight: 48; color: Theme.surface
             RowLayout {
-                anchors.fill: parent; anchors.leftMargin: 16; anchors.rightMargin: 12; spacing: 7
-                Label { text: "NOTEPAD"; color: Theme.accent; font.family: Theme.fontFamily; font.bold: true; font.pixelSize: 15; Layout.rightMargin: 13 }
-                ToolButton { text: "New"; onClicked: app.requestAction("new"); ToolTip.visible: hovered; ToolTip.text: "New (Ctrl+N)" }
-                ToolButton { text: "Open"; onClicked: app.requestAction("open"); ToolTip.visible: hovered; ToolTip.text: "Open (Ctrl+O)" }
-                ToolButton { text: "Save"; enabled: app.dirty; onClicked: app.save(); ToolTip.visible: hovered; ToolTip.text: "Save (Ctrl+S)" }
-                ToolButton { text: "Save As"; onClicked: saveDialog.open() }
-                Rectangle { Layout.fillHeight: true; Layout.preferredWidth: 1; color: Theme.border; Layout.leftMargin: 7; Layout.rightMargin: 7 }
-                ToolButton { text: "Undo"; enabled: editor.canUndo; onClicked: editor.undo() }
-                ToolButton { text: "Redo"; enabled: editor.canRedo; onClicked: editor.redo() }
-                ToolButton { text: "Find"; onClicked: { findBar.visible = true; findField.forceActiveFocus() } ToolTip.visible: hovered; ToolTip.text: "Find / Replace (Ctrl+F / Ctrl+H)" }
+                anchors.fill: parent; anchors.leftMargin: 18; anchors.rightMargin: 10
+                Label { text: "NOTEPAD"; color: Theme.accent; font.family: Theme.fontFamily; font.bold: true; font.pixelSize: 15 }
+                Rectangle { Layout.preferredWidth: 1; Layout.preferredHeight: 18; color: Theme.border; Layout.leftMargin: 12; Layout.rightMargin: 12 }
+                Label { text: app.basename(app.currentPath); color: Theme.muted; font.pixelSize: 13; elide: Text.ElideRight; Layout.fillWidth: true }
                 Item { Layout.fillWidth: true }
-                ToolButton { text: "Wrap"; checkable: true; checked: app.wrapEnabled; onToggled: { app.wrapEnabled = checked; state.wrapEnabled = checked } }
                 ToolButton {
-                    id: recentButton
-                    text: "Recent"
-                    onClicked: recentMenu.open()
+                    id: menuButton
+                    text: "☰"
+                    font.pixelSize: 20
+                    onClicked: appMenu.open()
+                    ToolTip.visible: hovered
+                    ToolTip.text: "Menu"
                 }
             }
             Menu {
-                id: recentMenu
-                x: recentButton.x
-                y: recentButton.y + recentButton.height
-                Repeater {
-                    model: app.recentFiles
-                    delegate: MenuItem {
-                        required property string modelData
-                        text: app.basename(modelData)
-                        onTriggered: { app.requestedPath = modelData; app.requestAction("openPath") }
+                id: appMenu
+                x: app.width - width - 10
+                y: 44
+                MenuItem { text: "New    Ctrl+N"; onTriggered: app.requestAction("new") }
+                MenuItem { text: "Open…    Ctrl+O"; onTriggered: app.requestAction("open") }
+                MenuItem { text: "Save    Ctrl+S"; enabled: app.dirty; onTriggered: app.save() }
+                MenuItem { text: "Save As…    Ctrl+Shift+S"; onTriggered: saveDialog.open() }
+                Menu {
+                    title: "Recent Files"
+                    enabled: app.recentFiles.length > 0
+                    Repeater {
+                        model: app.recentFiles
+                        delegate: MenuItem {
+                            required property string modelData
+                            text: app.basename(modelData)
+                            onTriggered: { app.requestedPath = modelData; app.requestAction("openPath") }
+                        }
                     }
+                    MenuSeparator { visible: app.recentFiles.length > 0 }
+                    MenuItem { text: "Clear recent files"; onTriggered: { app.recentFiles = []; state.recentFilesJson = "[]" } }
                 }
-                MenuSeparator { visible: app.recentFiles.length > 0 }
-                MenuItem { text: "Clear recent files"; enabled: app.recentFiles.length > 0; onTriggered: { app.recentFiles = []; state.recentFilesJson = "[]" } }
-            }
-        }
-        Rectangle {
-            Layout.fillWidth: true; Layout.preferredHeight: 44; color: Theme.raised
-            RowLayout { anchors.fill: parent; anchors.leftMargin: 16; spacing: 6
-                ToolButton { text: "B"; font.bold: true; onClicked: app.insertPair("**", "**"); ToolTip.visible: hovered; ToolTip.text: "Bold (Ctrl+B)" }
-                ToolButton { text: "I"; font.italic: true; onClicked: app.insertPair("*", "*"); ToolTip.visible: hovered; ToolTip.text: "Italic (Ctrl+I)" }
-                ToolButton { text: "H1"; onClicked: app.heading(1); ToolTip.visible: hovered; ToolTip.text: "Heading 1" }
-                ToolButton { text: "H2"; onClicked: app.heading(2); ToolTip.visible: hovered; ToolTip.text: "Heading 2" }
-                ToolButton { text: "• List"; onClicked: app.prefixLines("- ", false); ToolTip.visible: hovered; ToolTip.text: "Bullet list" }
-                ToolButton { text: "1. List"; onClicked: app.prefixLines("", true); ToolTip.visible: hovered; ToolTip.text: "Numbered list" }
-                ToolButton { text: "</>"; onClicked: app.insertPair("`", "`"); ToolTip.visible: hovered; ToolTip.text: "Inline code" }
-                ToolButton { text: "Link"; onClicked: app.insertPair("[", "](https://)"); ToolTip.visible: hovered; ToolTip.text: "Markdown link" }
+                MenuSeparator { }
+                MenuItem { text: "Undo    Ctrl+Z"; enabled: editor.canUndo; onTriggered: editor.undo() }
+                MenuItem { text: "Redo    Ctrl+Shift+Z"; enabled: editor.canRedo; onTriggered: editor.redo() }
+                MenuItem { text: "Find…    Ctrl+F"; onTriggered: { findBar.visible = true; findField.forceActiveFocus(); findField.selectAll() } }
+                MenuItem { text: "Find and Replace…    Ctrl+H"; onTriggered: { findBar.visible = true; replaceField.visible = true; findField.forceActiveFocus() } }
+                Menu {
+                    title: "Markdown"
+                    MenuItem { text: "Bold    Ctrl+B"; onTriggered: app.insertPair("**", "**") }
+                    MenuItem { text: "Italic    Ctrl+I"; onTriggered: app.insertPair("*", "*") }
+                    MenuSeparator { }
+                    MenuItem { text: "Heading 1"; onTriggered: app.heading(1) }
+                    MenuItem { text: "Heading 2"; onTriggered: app.heading(2) }
+                    MenuItem { text: "Bullet List"; onTriggered: app.prefixLines("- ", false) }
+                    MenuItem { text: "Numbered List"; onTriggered: app.prefixLines("", true) }
+                    MenuItem { text: "Inline Code"; onTriggered: app.insertPair("`", "`") }
+                    MenuItem { text: "Link"; onTriggered: app.insertPair("[", "](https://)") }
+                }
+                Menu {
+                    title: "View"
+                    MenuItem { text: "Word Wrap"; checkable: true; checked: app.wrapEnabled; onToggled: { app.wrapEnabled = checked; state.wrapEnabled = checked } }
+                }
             }
         }
         Rectangle {

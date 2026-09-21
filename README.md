@@ -5,11 +5,12 @@ Omarchy Notepad is a small, dark, keyboard-first editor written entirely in QML 
 ## What it includes
 
 - New, Open, Save, Save As, recent files, and unsaved-change confirmation
+- A clean title strip with one hamburger menu for file, edit, view, recent-file, and Markdown actions
 - Markdown actions for bold, italic, H1/H2 headings, bullets, numbered lists, inline code, and links
 - Undo/redo, system cut/copy/paste/select-all, Find/Replace, word wrap, and a live line/column status bar
 - Persistent window dimensions, word-wrap choice, and ten recent files
 - Native file dialogs restricted to `.md` and `.txt` by default
-- An Omarchy-friendly dark surface, muted borders, and green accent
+- Automatic active-Omarchy-theme colors, including live updates after a theme change
 
 ## Requirements
 
