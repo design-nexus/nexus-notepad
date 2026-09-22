@@ -4,8 +4,9 @@ Omarchy Notepad is a small, dark, keyboard-first editor written entirely in QML 
 
 ## What it includes
 
-- New, Open, Save, Save As, recent files, and unsaved-change confirmation
-- A clean title strip with one hamburger menu for file, edit, view, recent-file, and Markdown actions
+- Multiple document tabs, with independent edits, undo history, and unsaved-change confirmation when closing a tab or the window
+- New, Open, Save, Save As, and recent files
+- A compact tab strip with a new-tab button and organized hamburger menu for file, edit, view, recent-file, and Markdown actions
 - Markdown actions for bold, italic, H1/H2 headings, bullets, numbered lists, inline code, and links
 - Undo/redo, system cut/copy/paste/select-all, Find/Replace, word wrap, and a live line/column status bar
 - Persistent window dimensions, word-wrap choice, and ten recent files
@@ -37,7 +38,7 @@ chmod +x scripts/install.sh scripts/omarchy-notepad
 ./scripts/install.sh
 ```
 
-The installer copies the QML configuration to `~/.config/omarchy-notepad`, adds `omarchy-notepad` to `~/.local/bin`, and creates an application-launcher entry. Each launch opens an independent window. Ensure `~/.local/bin` is on your `PATH` (Omarchy normally configures this already).
+The installer copies each version to `~/.config/omarchy-notepad-releases`, points `~/.config/omarchy-notepad-current` at the latest version, adds `omarchy-notepad` to `~/.local/bin`, and creates an application-launcher entry. Existing windows keep their original version and open notes when you update; new launches use the latest version. Each launch opens an independent window. Ensure `~/.local/bin` is on your `PATH` (Omarchy normally configures this already).
 
 ## Run without installing
 
@@ -51,7 +52,8 @@ Run this inside your active Omarchy/Wayland session. A headless terminal cannot 
 
 | Shortcut | Action |
 |---|---|
-| `Ctrl+N`, `Ctrl+O`, `Ctrl+S`, `Ctrl+Shift+S` | New, Open, Save, Save As |
+| `Ctrl+N` or `Ctrl+T`, `Ctrl+O`, `Ctrl+S`, `Ctrl+Shift+S` | New tab, Open, Save, Save As |
+| `Ctrl+W`, `Ctrl+Tab` | Close tab, next tab |
 | `Ctrl+Z`, `Ctrl+Shift+Z` | Undo, Redo |
 | `Ctrl+X`, `Ctrl+C`, `Ctrl+V`, `Ctrl+A` | Cut, Copy, Paste, Select all |
 | `Ctrl+F`, `Ctrl+H`, `Esc` | Find, Find/replace, close search |
@@ -64,9 +66,9 @@ Qt's `TextArea` supplies the standard editing shortcuts. The toolbar also expose
 On an Arch system with Qt declarative tools installed:
 
 ```bash
-/usr/lib/qt6/bin/qmllint -I /usr/lib/qt6/qml app/shell.qml app/qml/NotepadWindow.qml app/qml/Theme.qml
+/usr/lib/qt6/bin/qmllint -I /usr/lib/qt6/qml app/shell.qml app/qml/*.qml
 ```
 
 ## Notes
 
-This is intentionally a single-window editor. It never modifies Omarchy's own configuration or files under `/usr/share/omarchy`; it runs as a separate Quickshell configuration. Preferences are saved through Qt's per-user settings store.
+Each launch creates an independent window. It never modifies Omarchy's own configuration or files under `/usr/share/omarchy`; it runs as a separate Quickshell configuration. Preferences are saved through Qt's per-user settings store.

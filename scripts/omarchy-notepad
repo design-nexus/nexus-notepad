@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-config_root="${XDG_CONFIG_HOME:-$HOME/.config}/omarchy-notepad"
+config_base="${XDG_CONFIG_HOME:-$HOME/.config}"
+config_root="$(readlink -f "$config_base/omarchy-notepad-current")"
+if [[ ! -f "$config_root/shell.qml" ]]; then
+    config_root="$config_base/omarchy-notepad"
+fi
 exec quickshell --path "$config_root"
