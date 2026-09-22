@@ -59,7 +59,8 @@ Run this inside your active Omarchy/Wayland session. A headless terminal cannot 
 | `Ctrl+F`, `Ctrl+H`, `Esc` | Find, Find/replace, close search |
 | `Ctrl+B`, `Ctrl+I` | Markdown bold, italic |
 
-Qt's `TextArea` supplies the standard editing shortcuts. The toolbar also exposes every Markdown action.
+Qt's `TextArea` supplies the standard editing shortcuts. The hamburger menu exposes every Markdown action.
+Middle-clicking a tab closes it; modified tabs still ask whether to save changes.
 
 ## Validate
 

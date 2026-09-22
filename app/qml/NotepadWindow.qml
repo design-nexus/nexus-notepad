@@ -303,6 +303,12 @@ Window {
                                         background: Rectangle { radius: 4; color: closeTabButton.hovered ? Theme.border : "transparent" }
                                     }
                                 }
+                                MouseArea {
+                                    anchors.fill: parent
+                                    z: 2
+                                    acceptedButtons: Qt.MiddleButton
+                                    onClicked: app.closeTab(tabChip.modelData)
+                                }
                             }
                         }
                     }
