@@ -1,6 +1,6 @@
-# Omarchy Notepad
+# Notepad
 
-Omarchy Notepad is a small, dark, keyboard-first editor written entirely in QML for Quickshell. It stores ordinary Markdown (`.md`) or plain-text (`.txt`) files—there is no rich-text format or backend service.
+Notepad is a small, dark, keyboard-first editor written entirely in QML for Quickshell. It stores ordinary Markdown (`.md`) or plain-text (`.txt`) files—there is no rich-text format or backend service.
 
 ## What it includes
 
@@ -34,11 +34,11 @@ The project targets Quickshell 0.3+ and Qt 6. It uses only standard Qt Quick mod
 From this project directory:
 
 ```bash
-chmod +x scripts/install.sh scripts/omarchy-notepad
+chmod +x scripts/install.sh scripts/nexus-notepad scripts/omarchy-notepad
 ./scripts/install.sh
 ```
 
-The installer copies each version to `~/.config/omarchy-notepad-releases`, points `~/.config/omarchy-notepad-current` at the latest version, adds `omarchy-notepad` to `~/.local/bin`, and creates an application-launcher entry. Existing windows keep their original version and open notes when you update; new launches use the latest version. Each launch opens an independent window. Ensure `~/.local/bin` is on your `PATH` (Omarchy normally configures this already).
+The installer copies each version to `~/.config/nexus-notepad-releases`, points `~/.config/nexus-notepad-current` at the latest version, adds `nexus-notepad` to `~/.local/bin`, and creates a launcher named **Notepad**. The old `omarchy-notepad` command remains as an alias. Existing windows keep their original version and open notes when you update; new launches use the latest version. Each launch opens an independent window. Ensure `~/.local/bin` is on your `PATH` (Omarchy normally configures this already).
 
 ## Run without installing
 

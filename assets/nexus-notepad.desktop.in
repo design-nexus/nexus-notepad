@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Name=Omarchy Notepad
-Comment=A lightweight Markdown and text editor for Omarchy
+Name=Notepad
+Comment=A lightweight Markdown and text editor
 Exec=@BIN@ %F
 Icon=accessories-text-editor
 Terminal=false

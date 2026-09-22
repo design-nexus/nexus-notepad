@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+config_base="${XDG_CONFIG_HOME:-$HOME/.config}"
+config_root="$(readlink -f "$config_base/nexus-notepad-current")"
+if [[ ! -f "$config_root/shell.qml" ]]; then
+    echo "Notepad is not installed. Run scripts/install.sh from the project directory." >&2
+    exit 1
+fi
+exec quickshell --path "$config_root"

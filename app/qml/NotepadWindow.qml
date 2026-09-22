@@ -12,7 +12,7 @@ import "."
 Window {
     id: app
     visible: true
-    title: (activeTab && activeTab.dirty ? "● " : "") + (activeTab ? activeTab.basename() : "Untitled") + " — Omarchy Notepad"
+    title: (activeTab && activeTab.dirty ? "● " : "") + (activeTab ? activeTab.basename() : "Untitled") + " — Notepad"
     color: Theme.bg
     minimumWidth: 640
     minimumHeight: 420
@@ -32,7 +32,7 @@ Window {
 
     Settings {
         id: state
-        category: "omarchy-notepad"
+        category: "nexus-notepad"
         fileName: Quickshell.statePath("preferences.ini")
         property int windowWidth: 1080
         property int windowHeight: 720
