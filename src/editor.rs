@@ -181,16 +181,21 @@ fn show_current() {
         d.buffer.place_cursor(&d.buffer.iter_at_offset(d.cursor.get()));
         let (scroll, vadj) = (d.scroll.get(), ED.with(|e| e.borrow().as_ref().map(|e| e.scroll.vadjustment())));
         let v = view.clone();
-        // Restore the scroll once the new text has been laid out.
-        glib::idle_add_local_once(move || {
+        // Restore the scroll on the first frame after the view has its real size;
+        // scrolling earlier works from sizes that are about to change.
+        v.add_tick_callback(move |v, _| {
+            if v.width() <= 1 {
+                return glib::ControlFlow::Continue;
+            }
             if scroll > 0.0
-                && let Some(vadj) = vadj
+                && let Some(vadj) = &vadj
             {
                 vadj.set_value(scroll);
             } else {
-                let insert = v.buffer().get_insert();
-                v.scroll_to_mark(&insert, 0.0, true, 0.0, 0.3);
+                // Only as far as needed to show the cursor: none at all when it's in view.
+                v.scroll_mark_onscreen(&v.buffer().get_insert());
             }
+            glib::ControlFlow::Break
         });
         if let Some(g) = gutter() {
             g.fit();

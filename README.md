@@ -43,6 +43,13 @@ notepad --section settings
 
 Press <kbd>F1</kbd> for every shortcut.
 
+To have it open floating and centered instead of tiled, add this to
+`~/.config/hypr/hyprland.lua`:
+
+```lua
+o.window("^io\\.github\\.design_nexus\\.Notepad$", { float = true, center = true, size = { 900, 700 } })
+```
+
 ## Files
 
 | Path | What |
