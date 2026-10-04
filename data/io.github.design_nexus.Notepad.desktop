@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Application
+Name=Nexus Notepad
+GenericName=Text Editor
+Comment=Write and edit plain text in tabs
+Exec=notepad %F
+Icon=io.github.design_nexus.Notepad
+Terminal=false
+Categories=Utility;TextEditor;GTK;
+Keywords=text;editor;notepad;notes;txt;plain;tabs;
+MimeType=text/plain;
+StartupNotify=true
+StartupWMClass=io.github.design_nexus.Notepad
+SingleMainWindow=true
+DBusActivatable=false
