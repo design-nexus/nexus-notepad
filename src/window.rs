@@ -110,13 +110,33 @@ fn build(app: &gtk::Application) {
     window.add_controller(drop);
 
     // Narrow windows (a tiled half-screen) get slimmer padding.
-    let w2 = window.clone();
-    glib::timeout_add_local(std::time::Duration::from_millis(400), move || {
-        let narrow = w2.width() > 0 && w2.width() < 980;
+    let apply_width = |w: &gtk::ApplicationWindow| {
+        let narrow = w.width() > 0 && w.width() < 980;
         if narrow != NARROW.with(|n| n.replace(narrow)) {
             editor::apply_prefs();
         }
-        settings_dialog::fit(&w2);
+        settings_dialog::fit(w);
+    };
+    // Tiled windows are resized by the compositor without touching the default
+    // size: an invisible layer over the whole window reports each real size
+    // change, and the layout follows on the next frame.
+    let probe = gtk::DrawingArea::new();
+    probe.set_can_target(false);
+    probe.set_can_focus(false);
+    overlay.add_overlay(&probe);
+    overlay.set_measure_overlay(&probe, false);
+    {
+        let (aw, w2) = (apply_width, window.clone());
+        probe.connect_resize(move |_, _, _| {
+            let (aw, w2) = (aw, w2.clone());
+            // After this layout pass, when the window's width is the new one.
+            glib::idle_add_local_once(move || aw(&w2));
+        });
+    }
+    // A slow fallback, in case a resize slips by.
+    let w2 = window.clone();
+    glib::timeout_add_local(std::time::Duration::from_millis(1500), move || {
+        apply_width(&w2);
         glib::ControlFlow::Continue
     });
 
